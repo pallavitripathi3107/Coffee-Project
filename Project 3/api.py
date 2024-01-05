@@ -21,11 +21,8 @@ print(base.classes.keys())
 # Save references to each table
 coffee_consumption = base.classes.coffee_consumption
 coffee_exporters = base.classes.coffee_exporters
-coffee_green_inventory = base.classes.coffee_green_inventory
 coffee_importers = base.classes.coffee_importers
-coffee_importers_consumption = base.classes.coffee_importers_consumption
 coffee_production = base.classes.coffee_production
-coffee_re_exported = base.classes.coffee_re_exported
 coffee_countries = base.classes.countries
 
 # Create an app, being sure to pass __name__
