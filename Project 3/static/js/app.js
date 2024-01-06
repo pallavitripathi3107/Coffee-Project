@@ -1,11 +1,11 @@
 //Define all api urls to be used to fetch data
-const url_years = "http://127.0.0.1:5000/get_all_years";
-const url_data_types = "http://127.0.0.1:5000/get_all_data_types";
-const url_production = "http://127.0.0.1:5000/get_production_data";
-const url_consumption = "http://127.0.0.1:5000/get_consumption_data";
-const url_import = "http://127.0.0.1:5000/get_import_data";
-const url_export = "http://127.0.0.1:5000/get_export_data";
-const url_country_codes = "http://127.0.0.1:5000/get_country_codes";
+const url_years = "http://127.0.0.1:5001/get_all_years";
+const url_data_types = "http://127.0.0.1:5001/get_all_data_types";
+const url_production = "http://127.0.0.1:5001/get_production_data";
+const url_consumption = "http://127.0.0.1:5001/get_consumption_data";
+const url_import = "http://127.0.0.1:5001/get_import_data";
+const url_export = "http://127.0.0.1:5001/get_export_data";
+const url_country_codes = "http://127.0.0.1:5001/get_country_codes";
 
 
 //Global variables to be populated and used in the functions.
@@ -38,9 +38,9 @@ d3.json(url_data_types).then(function(data) {
     }
 });
 
-////fetch country codes.
+//fetch country codes.
 d3.json(url_country_codes).then(function(data) {
-    country_code = data;
+    country_codes = data;
 });
 
 //fetch consumption data
@@ -104,16 +104,16 @@ function createMapChart(type, year) {
 
     //fetch required data to be displayed depending on type selected.
     let data = {};
-    if (type === "production") {
+    if (type === "Production") {
         data = production_data[year];
         console.log(data);
-    } else if (type === "consumption") {
+    } else if (type === "Consumption") {
         data = consumption_data[year];
         console.log(data);
-    } else if (type === "import") {
+    } else if (type === "Import") {
         data = import_data[year];
         console.log(data);
-    } else if (type === "export") {
+    } else if (type === "Export") {
         data = export_data[year];
         console.log(data);
     }
@@ -122,10 +122,17 @@ function createMapChart(type, year) {
     map_data = getMapData(data);
 
     //clean previous displayed map.
-    d3.select("#bubble").text("");
+    d3.select("#map-heading").text("");
+    d3.select("#map").text("");
+
+    //Write new heading for map
+    var mapHeadingDiv = document.querySelector('#map-heading');
+    var h3 = document.createElement('h3');
+    h3.textContent = 'Coffee ' + type + ' all over the world in the year ' + year;
+    mapHeadingDiv.appendChild(h3);
 
     //create new map.
-    $('#bubble').vectorMap({
+    $('#map').vectorMap({
       map: 'world_mill',
       series: {
         regions: [{
@@ -145,7 +152,7 @@ function getMapData(data) {
     let finalData = {};
 
     for (const [key, value] of Object.entries(data)) {
-        let countryKey = country_code[key];
+        let countryKey = country_codes[key];
         if (countryKey == null || countryKey === null) {
             console.log("Not found:" + key);
         }
@@ -157,16 +164,16 @@ function getMapData(data) {
 //Create bar graph
 function createBar(type, year) {
     let data = {};
-    if (type === "production") {
+    if (type === "Production") {
         data = production_data[year];
         console.log(data);
-    } else if (type === "consumption") {
+    } else if (type === "Consumption") {
         data = consumption_data[year];
         console.log(data);
-    } else if (type === "import") {
+    } else if (type === "Import") {
         data = import_data[year];
         console.log(data);
-    } else if (type === "export") {
+    } else if (type === "Export") {
         data = export_data[year];
         console.log(data);
     }
@@ -191,15 +198,16 @@ function createBar(type, year) {
     };
 
     let layout = {
-        height: 400,
+        height: 500,
         width: 700,
-        xaxis: {
-            title: 'Countries'
-        },
         yaxis: {
             title: 'Kilograms'
         },
-        title: 'Top 10 countries in ' + type,
+        title: 'Top 10 countries in coffee ' + type + ' in year ' + year,
+        font: {
+            family: 'Tahoma',
+            size: 15,
+        }
     }   
 
     let plot_data = [trace];
